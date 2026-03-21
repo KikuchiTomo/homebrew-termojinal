@@ -1,18 +1,18 @@
 class Termojinal < Formula
   desc "GPU-accelerated terminal emulator with AI agent coordination"
   homepage "https://github.com/KikuchiTomo/termojinal"
-  TERMOJINAL_VERSION = "0.2.7-beta"
+  TERMOJINAL_VERSION = "0.2.8-beta"
   version TERMOJINAL_VERSION
   license "MIT"
 
   # Pre-built universal binaries from GitHub Releases (built by CI)
   url "https://github.com/KikuchiTomo/termojinal/releases/download/v#{TERMOJINAL_VERSION}/termojinal-#{TERMOJINAL_VERSION}-cli-macos-universal.tar.gz"
-  sha256 "9b037b485c9f95d566fb59f637a6d3f6c08df745a075aef7ae6080e094c3aa2c"
+  sha256 "d38831079cb987a05d933bd6e01639500c46a4b895772ccaf143cfee34d67b0a"
 
   # The .app bundle is a separate download
   resource "app" do
     url "https://github.com/KikuchiTomo/termojinal/releases/download/v#{TERMOJINAL_VERSION}/termojinal-#{TERMOJINAL_VERSION}-macos-universal.tar.gz"
-    sha256 "3eead08d4530b94e58a750d5401de9d71d72f60be64747b7bb44a820a93a6abc"
+    sha256 "1bec1014eba3fa00833aea6bcce3229cc7eeade334ea00a5dc618152f8f08d13"
   end
 
   def install
@@ -66,24 +66,27 @@ class Termojinal < Formula
   def post_install
     (var/"log/termojinal").mkpath
 
-    # Symlink Termojinal.app into /Applications
-    app_target = Pathname.new("/Applications/Termojinal.app")
+    # Copy Termojinal.app to /Applications (not symlink — avoids macOS App Translocation loops)
     app_source = prefix/"Termojinal.app"
+    app_target = Pathname.new("/Applications/Termojinal.app")
     if app_source.exist? && !app_target.exist?
-      ln_s app_source, app_target
-      ohai "Linked Termojinal.app to /Applications"
+      begin
+        cp_r app_source, app_target
+        system "xattr", "-cr", app_target.to_s
+        ohai "Installed Termojinal.app to /Applications"
+      rescue StandardError => e
+        opoo "Could not copy Termojinal.app to /Applications: #{e.message}"
+        opoo "Run: cp -r '#{app_source}' /Applications/Termojinal.app"
+      end
     end
 
     # Create config directory
     config_dir = Pathname.new(Dir.home)/".config/termojinal"
-    unless config_dir.exist?
-      config_dir.mkpath
-      ohai "Created #{config_dir}"
-    end
+    config_dir.mkpath unless config_dir.exist?
   end
 
   def caveats
-    <<~EOS
+    msg = <<~EOS
       Run `tm setup` to configure Claude Code hooks and bundled commands.
 
       To start the daemon (enables Ctrl+` global hotkey):
@@ -91,9 +94,19 @@ class Termojinal < Formula
 
       To configure:
         cp #{opt_pkgshare}/config.example.toml ~/.config/termojinal/config.toml
-
-      Termojinal.app has been linked to /Applications.
     EOS
+
+    app_target = Pathname.new("/Applications/Termojinal.app")
+    if app_target.exist?
+      msg += "\n  Termojinal.app is available in /Applications.\n"
+    else
+      msg += <<~EOS
+
+        To add Termojinal.app to /Applications:
+          cp -r #{opt_prefix}/Termojinal.app /Applications/Termojinal.app
+      EOS
+    end
+    msg
   end
 
   test do
