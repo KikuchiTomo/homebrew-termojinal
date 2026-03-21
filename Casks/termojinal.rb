@@ -1,6 +1,6 @@
 cask "termojinal" do
-  version "0.4.1-beta"
-  sha256 "ad9e9e5945bf4d8c97c732c01ba1d61a07a3c3d5c8c8e19387873641024e286b"
+  version "0.4.2-beta"
+  sha256 "819c4ec9e621db560b81d04142df08bd3b033857123f58d0f3c29387de3af39a"
 
   url "https://github.com/KikuchiTomo/termojinal/releases/download/v#{version}/termojinal-#{version}-macos-universal.tar.gz"
   name "Termojinal"
