@@ -1,18 +1,18 @@
 class Termojinal < Formula
   desc "GPU-accelerated terminal emulator with AI agent coordination"
   homepage "https://github.com/KikuchiTomo/termojinal"
-  TERMOJINAL_VERSION = "0.3.0-beta"
+  TERMOJINAL_VERSION = "0.3.1-beta"
   version TERMOJINAL_VERSION
   license "MIT"
 
   # Pre-built universal binaries from GitHub Releases (built by CI)
   url "https://github.com/KikuchiTomo/termojinal/releases/download/v#{TERMOJINAL_VERSION}/termojinal-#{TERMOJINAL_VERSION}-cli-macos-universal.tar.gz"
-  sha256 "d407b9a745a7b0adfe20751ad32c09715cb6369340850bb3cc67b71f60e98b61"
+  sha256 "bcf001ec26e5b60f64c5cf2dead84d2a4c2d5c19085373d11d24a8244d1ef7a3"
 
   # The .app bundle is a separate download
   resource "app" do
     url "https://github.com/KikuchiTomo/termojinal/releases/download/v#{TERMOJINAL_VERSION}/termojinal-#{TERMOJINAL_VERSION}-macos-universal.tar.gz"
-    sha256 "77b55ea81048e3df3772bf9b46f0445942ead6f06bee7ea1be0859ee25f58d45"
+    sha256 "f9e046fbe3578fdbafb68a9b80f0128b8acf7b488ef9cf2f0daf8b6c57fc6042"
   end
 
   def install
@@ -69,14 +69,15 @@ class Termojinal < Formula
     # Copy Termojinal.app to /Applications (not symlink — avoids macOS App Translocation loops)
     app_source = prefix/"Termojinal.app"
     app_target = Pathname.new("/Applications/Termojinal.app")
-    if app_source.exist? && !app_target.exist?
+    if app_source.exist?
       begin
+        rm_rf app_target if app_target.exist?
         cp_r app_source, app_target
         system "xattr", "-cr", app_target.to_s
         ohai "Installed Termojinal.app to /Applications"
       rescue StandardError => e
         opoo "Could not copy Termojinal.app to /Applications: #{e.message}"
-        opoo "Run: cp -r '#{app_source}' /Applications/Termojinal.app"
+        opoo "Run: rm -rf '#{app_target}' && cp -r '#{app_source}' /Applications/Termojinal.app"
       end
     end
 
