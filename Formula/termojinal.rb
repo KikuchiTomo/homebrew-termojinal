@@ -1,18 +1,18 @@
 class Termojinal < Formula
   desc "GPU-accelerated terminal emulator with AI agent coordination"
   homepage "https://github.com/KikuchiTomo/termojinal"
-  TERMOJINAL_VERSION = "0.3.1-beta"
+  TERMOJINAL_VERSION = "0.4.0-beta"
   version TERMOJINAL_VERSION
   license "MIT"
 
   # Pre-built universal binaries from GitHub Releases (built by CI)
   url "https://github.com/KikuchiTomo/termojinal/releases/download/v#{TERMOJINAL_VERSION}/termojinal-#{TERMOJINAL_VERSION}-cli-macos-universal.tar.gz"
-  sha256 "bcf001ec26e5b60f64c5cf2dead84d2a4c2d5c19085373d11d24a8244d1ef7a3"
+  sha256 "7f43db550bdd85b83200e262d50a96e8c1a4e977b9af05a39c3021d8061d5e59"
 
   # The .app bundle is a separate download
   resource "app" do
     url "https://github.com/KikuchiTomo/termojinal/releases/download/v#{TERMOJINAL_VERSION}/termojinal-#{TERMOJINAL_VERSION}-macos-universal.tar.gz"
-    sha256 "f9e046fbe3578fdbafb68a9b80f0128b8acf7b488ef9cf2f0daf8b6c57fc6042"
+    sha256 "87289d1937747c8292f0fbba932957861e0887adf1bcef47c2cceb8f5570989e"
   end
 
   def install
