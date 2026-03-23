@@ -7,7 +7,7 @@ class Termojinal < Formula
 
   # Pre-built universal binaries from GitHub Releases (built by CI)
   url "https://github.com/KikuchiTomo/termojinal/releases/download/v#{TERMOJINAL_VERSION}/termojinal-#{TERMOJINAL_VERSION}-cli-macos-universal.tar.gz"
-  sha256 "3303db444b724ed81b7571ac170c988da16d2443235e3a20b5a2bbc26e6667a4"
+  sha256 "709e905873fb83d6201cf91b9f3575d07ba70b8dfec706a47f8f715e50db7ef3"
 
   def install
     # Install pre-built CLI binaries
