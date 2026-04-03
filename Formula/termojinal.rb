@@ -1,13 +1,13 @@
 class Termojinal < Formula
   desc "GPU-accelerated terminal emulator with AI agent coordination (CLI tools)"
   homepage "https://github.com/KikuchiTomo/termojinal"
-  TERMOJINAL_VERSION = "0.9.9-beta"
+  TERMOJINAL_VERSION = "0.9.10-beta"
   version TERMOJINAL_VERSION
   license "MIT"
 
   # Pre-built universal binaries from GitHub Releases (built by CI)
   url "https://github.com/KikuchiTomo/termojinal/releases/download/v#{TERMOJINAL_VERSION}/termojinal-#{TERMOJINAL_VERSION}-cli-macos-universal.tar.gz"
-  sha256 "881b0d18b6d97918c9d712cdad1b6fb19c2d7934f8aaf4580c5dcdcad4c9fc76"
+  sha256 "c88a995f2534801af334525121e0c45cd2c0ce517737034e9e4997018d21e754"
 
   def install
     # Install pre-built CLI binaries
